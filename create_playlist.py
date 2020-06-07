@@ -5,21 +5,14 @@ from exceptions import ResponseException
 from secrets import spotify_user_id, spotify_token
 
 
-def is_sunny(response_json):
-    return response_json["valence"] > 0.5 and response_json["danceability"] > 0.6
-
-
-def is_rainy(response_json):
-    return response_json["valence"] < 0.4 and response_json["energy"] < 0.4
-
-
 class CreatePlaylist:
 
-    def __init__(self, weather):
+    def __init__(self, weather, temp):
         self.user_id = spotify_user_id
         self.spotify_token = spotify_token
         self.weather = weather
         self.weather_corr = {"sunny": is_sunny, "rainy": is_rainy}
+        self.temp = temp
 
     def create_playlist(self):
         print(".")
@@ -126,7 +119,7 @@ class CreatePlaylist:
 
             feature_response_json = feature_response.json()
 
-            if not self.weather_corr[self.weather](feature_response_json):
+            if not self.weather_corr[self.weather](feature_response_json, self.temp):
                 continue
 
             song_list.append(songs[0]['track']['uri'])
@@ -136,10 +129,42 @@ class CreatePlaylist:
         return song_list
 
 
+def is_sunny(response_json, temp):
+    valence = response_json["valence"]
+    danceability = response_json["danceability"]
+
+    if temp == "hot":
+        return valence > 0.5 and danceability < 0.5
+    elif temp == "cool":
+        return valence > 0.5 and danceability >= 0.5
+    elif temp == "cold":
+        return valence > 0.35 and danceability <= 0.6
+
+
+def is_cloudy(response_json, temp):
+    valence = response_json["valence"]
+    danceability = response_json["danceability"]
+
+    if temp == "hot":
+        return valence < 0.5 and danceability < 0.5
+    elif temp == "cool":
+        return valence < 0.5 and danceability >= 0.5
+    elif temp == "cold":
+        return valence < 0.5 and danceability < 0.3
+
+
+def is_rainy(response_json, temp):
+    valence = response_json["valence"]
+    energy = response_json["energy"]
+
+    return valence < 0.4 and energy < 0.4
+
+
 if __name__ == '__main__':
-    weather = input("What's the weather like today? ")
-    cp = CreatePlaylist(weather)
-    if weather == "rainy":
+    skies = input("What's the weather like today? ")
+    temperature = input("How hot is it? ")
+    cp = CreatePlaylist(skies, temperature)
+    if skies == "rainy":
         pickmeup = input("Do you need a pick me up? y/n ")
         if pickmeup == "y":
             weather = "sunny"
