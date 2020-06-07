@@ -1,0 +1,3 @@
+spotify_token = "BQA3Qmx8elrRocbV_amNF-ucD1bre6jSvt9WJWwp_emuisL4o8HqLEs3joNo78KVvrrSGqjapvPe5oN5N7NURuIMO2Z6G8aD5l6XVX7pqkDnT8qunzjSLqEKPsYoG7RX9EIgbh2LhqJG04kHZ2V5qIN3m4Zx8YAlKyaEA0gDhur2LFfCoDtm-b97a-UQWoMvjp9pIiFQMD9gQ2gt5G1L"
+spotify_user_id = "1291090309"
+secret = "b0e0983a524d4883bb7979422c75ae6a"
