@@ -1,3 +1,0 @@
-spotify_token = "BQBm0KB_AVysXSyVEEl0Ig9mXxj9NGBhJB4PS13bWXmugKw_6bh5soLt4yFpBmVMN4yqA0VgytzbcJrGehPop8udNm2kuasVlKIeH4cYWa41uDh-wu6gqTz-uF0Q1-NleCE9ALlF96Fw7CEraSbgIOGnIilMYdHSoB8ZduQS5b19dUcPunfQh2Y9bfH6zOJIvMKCF76Rmb_Ikfa61Uea"
-spotify_user_id = "1291090309"
-secret = "b0e0983a524d4883bb7979422c75ae6a"
