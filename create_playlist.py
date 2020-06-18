@@ -1,8 +1,10 @@
 import random
 import json
 import requests
-from exceptions import ResponseException
-from secrets import spotify_user_id, spotify_token
+from .exceptions import ResponseException
+from .secrets import spotify_user_id, spotify_token
+from flask import Flask
+app = Flask(__name__)
 
 
 class CreatePlaylist:
@@ -32,6 +34,7 @@ class CreatePlaylist:
             }
         )
         response_json = response.json()
+        print(response_json)
         #playlist id
         return response_json["id"]
 
