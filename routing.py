@@ -24,6 +24,5 @@ def my_form_post():
         weather = request.form["weather"]
         temp = request.form["temp"]
         create_p = CreatePlaylist(weather.lower(), temp.lower())
-        # this number should be the amount of songs in your library
-        create_p.add_songs_to_playlist(1811)
+        create_p.add_songs_to_playlist()
     return 'Check ur spotify, loser'

@@ -38,6 +38,26 @@ class CreatePlaylist:
         #playlist id
         return response_json["id"]
 
+    def get_library_size():
+        cur_offset = -50
+        response = 200
+
+        while response == 200:
+            cur_offset += 50
+            query = "https://api.spotify.com/v1/me/tracks?limit=50&offset={}".format(cur_offset)
+
+            page_response = requests.get(
+                query,
+                headers={
+                    "Authorization": "Bearer {}".format(self.spotify_token)
+                }
+            )
+        
+            response = page_response.status_code
+        
+        return cur_offset
+
+
     def get_spotify_uri(self, song_name, artist):
 
         query = "https://api.spotify.com/v1/search?q=track%3A{}%20artist%3A{}&type=track".format(song_name, artist)
@@ -56,10 +76,11 @@ class CreatePlaylist:
 
         return uri
 
-    def add_songs_to_playlist(self, selection_size):
+    def add_songs_to_playlist(self):
         print(".")
         # create playlist
         playlist_id = self.create_playlist()
+        selection_size = get_library_size()
         uris = self.get_random_songs_from_library(selection_size)
 
         query = "https://api.spotify.com/v1/playlists/{}/tracks".format(playlist_id)
