@@ -4,20 +4,6 @@ from .create_playlist import CreatePlaylist
 app = Flask(__name__)
 app.debug = True
 
-<<<<<<< HEAD
-
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
-
-
-@app.route('/shh')
-def shut_up():
-    return 'Shut the fuck up'
-
-
-=======
->>>>>>> 586577bcdc094ac9d8c0227440bdf5c72f25bb56
 @app.route('/playlist')
 def create():
     create_p = CreatePlaylist("sunny", "cool")
