@@ -9,18 +9,24 @@ app = Flask(__name__)
 
 class CreatePlaylist:
 
-    def __init__(self, weather, temp):
+    def __init__(self, weather_code, temp, location):
         self.user_id = spotify_user_id
         self.spotify_token = spotify_token
-        self.weather = weather
-        self.weather_corr = {"sunny": is_sunny, "rainy": is_rainy}
+        if weather_code > 751 and weather_code < 804:
+            self.weather = "sunny"
+        elif weather_code < 621:
+            self.weather = "rainy"
+        else:
+            self.weather = "cloudy"
+        self.weather_corr = {"sunny": is_sunny, "rainy": is_rainy, "cloudy": is_cloudy}
         self.temp = temp
+        self.location = location
 
     def create_playlist(self):
         print(".")
         request_body = json.dumps({
             "name": "Your {} day playlist".format(self.weather),
-            "description": "Some songs to fit this {} day".format(self.weather),
+            "description": "Some songs to fit this {} day. It is {} degrees Celsius in {}".format(self.weather, self.temp, self.location),
             "public": True
         })
 
@@ -34,28 +40,24 @@ class CreatePlaylist:
             }
         )
         response_json = response.json()
-        print(response_json)
+        #print(response_json)
         #playlist id
         return response_json["id"]
 
-    def get_library_size():
-        cur_offset = -50
-        response = 200
+    def get_library_size(self):
+        query = "https://api.spotify.com/v1/me/tracks?limit=1"
+        page_response = requests.get(
+            query,
+            headers={
+                "Authorization": "Bearer {}".format(self.spotify_token)
+            }
+        )
 
-        while response == 200:
-            cur_offset += 50
-            query = "https://api.spotify.com/v1/me/tracks?limit=50&offset={}".format(cur_offset)
-
-            page_response = requests.get(
-                query,
-                headers={
-                    "Authorization": "Bearer {}".format(self.spotify_token)
-                }
-            )
+        response_json = page_response.json()
         
-            response = page_response.status_code
-        
-        return cur_offset
+        total = response_json["total"]
+    
+        return total
 
 
     def get_spotify_uri(self, song_name, artist):
@@ -80,7 +82,7 @@ class CreatePlaylist:
         print(".")
         # create playlist
         playlist_id = self.create_playlist()
-        selection_size = get_library_size()
+        selection_size = self.get_library_size()
         uris = self.get_random_songs_from_library(selection_size)
 
         query = "https://api.spotify.com/v1/playlists/{}/tracks".format(playlist_id)
@@ -157,11 +159,11 @@ def is_sunny(response_json, temp):
     valence = response_json["valence"]
     danceability = response_json["danceability"]
 
-    if temp == "hot":
+    if temp >= 25:
         return valence > 0.5 and danceability < 0.5
-    elif temp == "cool":
+    elif temp >= 9:
         return valence > 0.5 and danceability >= 0.5
-    elif temp == "cold":
+    else:
         return valence > 0.35 and danceability <= 0.6
 
 
@@ -169,11 +171,11 @@ def is_cloudy(response_json, temp):
     valence = response_json["valence"]
     danceability = response_json["danceability"]
 
-    if temp == "hot":
+    if temp >= 25:
         return valence < 0.5 and danceability < 0.5
-    elif temp == "cool":
+    elif temp >= 9:
         return valence < 0.5 and danceability >= 0.5
-    elif temp == "cold":
+    else:
         return valence < 0.5 and danceability < 0.3
 
 

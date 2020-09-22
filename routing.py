@@ -1,8 +1,29 @@
 from flask import Flask, request, render_template
 from .create_playlist import CreatePlaylist
+from .secrets import weather_key
+import requests
 
 app = Flask(__name__)
 app.debug = True
+
+def get_weather(city, country, state=None):
+    if state:
+        query = "https://api.weatherbit.io/v2.0/current?city={},{}&country={}&key={}".format(city, state, country, weather_key)
+    else:
+        query = "https://api.weatherbit.io/v2.0/current?city={}&country={}&key={}".format(city, country, weather_key)
+    
+    weather_request = requests.get(query)
+
+    weather_json = weather_request.json()
+    print(weather_json)
+
+    data = weather_json['data'][0]
+
+    weather_code = data['weather']['code']
+    temp = data['temp']
+
+    return weather_code, temp
+
 
 @app.route('/playlist')
 def create():
@@ -20,9 +41,19 @@ def my_form():
 def my_form_post():
     if request.method == 'GET':
         return render_template('myform.html')
+    
     elif request.method == 'POST':
-        weather = request.form["weather"]
-        temp = request.form["temp"]
-        create_p = CreatePlaylist(weather.lower(), temp.lower())
+        city = request.form['city']
+        state = request.form['state']
+        country = request.form['country']
+        
+        if state:
+            location = city + ", " + state +  ", " + country
+        else:
+            location = city + ", " + country
+        
+        weather_code, temp = get_weather(request.form["city"], state=request.form["state"], country=request.form["country"])
+        create_p = CreatePlaylist(weather_code, temp, location)
         create_p.add_songs_to_playlist()
+    
     return 'Check ur spotify, loser'

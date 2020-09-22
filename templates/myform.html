@@ -3,10 +3,20 @@
 <body>
 
 <form method='POST'>
-    <p>How's the weather today? (sunny/cloudy/rainy)</p>
-    <input name="weather">
-    <p>Is it hot, cool, or cold?</p>
-    <input name="temp">
+    <p>Where are you?</p>
+    <div>
+        <label for="city">City</label>
+        <input type="text" id='city' name="city" required>
+    </div>
+    <div>
+        <label for="state">State</label>
+        <input type="text" id='state' name="state" placeholder='(Optional)' pattern='[A-Za-z]{2}'>
+    </div>
+    <div>
+        <label for="country">Country</label>
+        <input type="text" id='country' name="country" required>
+    </div>
+
     <input type="submit">
 </form>
 
