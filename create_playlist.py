@@ -21,9 +21,9 @@ class CreatePlaylist:
         self.weather_corr = {"sunny": is_sunny, "rainy": is_rainy, "cloudy": is_cloudy}
         self.temp = temp
         self.location = location
+        self.playlist_link = None
 
     def create_playlist(self):
-        print(".")
         request_body = json.dumps({
             "name": "Your {} day playlist".format(self.weather),
             "description": "Some songs to fit this {} day. It is {} degrees Celsius in {}".format(self.weather, self.temp, self.location),
@@ -40,8 +40,8 @@ class CreatePlaylist:
             }
         )
         response_json = response.json()
-        #print(response_json)
         #playlist id
+        self.playlist_link = response_json["external_urls"]["spotify"]
         return response_json["id"]
 
     def get_library_size(self):
@@ -79,10 +79,9 @@ class CreatePlaylist:
         return uri
 
     def add_songs_to_playlist(self):
-        print(".")
         # create playlist
         playlist_id = self.create_playlist()
-        selection_size = self.get_library_size()
+        selection_size = self.get_library_size() - 1
         uris = self.get_random_songs_from_library(selection_size)
 
         query = "https://api.spotify.com/v1/playlists/{}/tracks".format(playlist_id)
@@ -108,9 +107,9 @@ class CreatePlaylist:
     def get_random_songs_from_library(self, selection_size):
         song_list = []
         prev = []
-        print(".")
+
         i = 0
-        while i < 10:
+        while i < 20:
             offset = random.randrange(0, selection_size)
             while offset in prev:
                 offset = random.randrange(0, selection_size)
@@ -151,8 +150,12 @@ class CreatePlaylist:
             song_list.append(songs[0]['track']['uri'])
 
             i += 1
+            print(i, "songs added")
 
         return song_list
+    
+    def get_playlist_link(self):
+        return self.playlist_link
 
 
 def is_sunny(response_json, temp):

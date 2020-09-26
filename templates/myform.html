@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <html>
-<body>
+    <head>
+        <link href="{{ url_for('static', filename='style.css') }}" type="text/css" rel="stylesheet">
+    </head>
+    <body>
 
-<form method='POST'>
-    <p>Where are you?</p>
-    <div>
-        <label for="city">City</label>
-        <input type="text" id='city' name="city" required>
-    </div>
-    <div>
-        <label for="state">State</label>
-        <input type="text" id='state' name="state" placeholder='(Optional)' pattern='[A-Za-z]{2}'>
-    </div>
-    <div>
-        <label for="country">Country</label>
-        <input type="text" id='country' name="country" required>
-    </div>
+        <form method='POST'>
+            <h1>Where are you?</h1>
+            <div>
+                <label for="city">City</label>
+                <br>
+                <input type="text" id='city' name="city" required>
+            </div>
+            <br>
+            <div>
+                <label for="state">State</label>
+                <br>
+                <input type="text" id='state' name="state" placeholder='(Optional)' pattern='[A-Za-z]{2}'>
+            </div>
+            <br>
+            <div>
+                <label for="country">Country</label>
+                <br>
+                <input type="text" id='country' name="country" required>
+            </div>
+            <br>
+            <input type="submit">
+        </form>
 
-    <input type="submit">
-</form>
-
-</body>
+    </body>
 </html>

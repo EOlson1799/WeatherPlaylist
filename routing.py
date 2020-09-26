@@ -37,7 +37,7 @@ def my_form():
     return render_template('myform.html')
 
 
-@app.route('/form', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def my_form_post():
     if request.method == 'GET':
         return render_template('myform.html')
@@ -55,5 +55,6 @@ def my_form_post():
         weather_code, temp = get_weather(request.form["city"], state=request.form["state"], country=request.form["country"])
         create_p = CreatePlaylist(weather_code, temp, location)
         create_p.add_songs_to_playlist()
+        link = create_p.get_playlist_link()
     
-    return 'Check ur spotify, loser'
+    return link

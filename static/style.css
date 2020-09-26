@@ -1,0 +1,22 @@
+body {
+    background-color: skyblue;
+}
+
+form {
+    text-align: center;
+}
+
+label {
+    text-align: center;
+}
+
+h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: pink;
+}
+
+p {
+    font-family: Arial, Helvetica, sans-serif;
+    background: fixed center;
+    background-color: pink;
+}
