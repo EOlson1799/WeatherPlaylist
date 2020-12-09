@@ -6,6 +6,8 @@ import requests
 app = Flask(__name__)
 app.debug = True
 
+# Uses given city and country (State is optional) to find weather conditions
+# via WeatherBit.io API
 def get_weather(city, country, state=None):
     if state:
         query = "https://api.weatherbit.io/v2.0/current?city={},{}&country={}&key={}".format(city, state, country, weather_key)
@@ -25,18 +27,19 @@ def get_weather(city, country, state=None):
     return weather_code, temp
 
 
-@app.route('/playlist')
-def create():
-    create_p = CreatePlaylist("sunny", "cool")
-    create_p.add_songs_to_playlist(1811)
-    return 'Check ur spotify loser'
+#@app.route('/playlist')
+#def create():
+#    create_p = CreatePlaylist("sunny", "cool")
+#    create_p.add_songs_to_playlist(1811)
+#    return 'Check ur spotify loser'
 
-
+# Testing
 @app.route('/form')
 def my_form():
     return render_template('myform.html')
 
-
+# Main route, gets location for weather conditions
+# Creates Playlist object and returns link to web page
 @app.route('/', methods=['GET', 'POST'])
 def my_form_post():
     if request.method == 'GET':
@@ -57,4 +60,4 @@ def my_form_post():
         create_p.add_songs_to_playlist()
         link = create_p.get_playlist_link()
     
-    return link
+    return render_template("link.html", playlist_link=link)

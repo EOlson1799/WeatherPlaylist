@@ -1,3 +1,11 @@
+div#loading {
+    width: 35px;
+    height: 35px;
+    display: none;
+    background: url(/static/loadingimage.gif) no-repeat;
+    cursor: wait;
+}
+
 body {
     background-color: skyblue;
 }
@@ -12,11 +20,15 @@ label {
 
 h1 {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: pink;
 }
 
 p {
     font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
     background: fixed center;
-    background-color: pink;
 }
+
+a {
+    text-align: center;
+}
+

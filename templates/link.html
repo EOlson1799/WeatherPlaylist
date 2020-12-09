@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 <html>
-    <head></head>
+    <head>
+        <link href="{{ url_for('static', filename='style.css') }}" type="text/css" rel="stylesheet">
+        <style>
+            body {
+                background-color: white;
+            }
+        </style>
+    </head>
     <body>
-        
+        <p>
+            <a href= {{ playlist_link }} >Playlist link</a>
+        </p>
     </body>
 </html>

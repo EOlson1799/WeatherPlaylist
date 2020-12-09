@@ -23,6 +23,7 @@ class CreatePlaylist:
         self.location = location
         self.playlist_link = None
 
+    # Create an empty playlist, include weather conditions in description
     def create_playlist(self):
         request_body = json.dumps({
             "name": "Your {} day playlist".format(self.weather),
@@ -44,6 +45,7 @@ class CreatePlaylist:
         self.playlist_link = response_json["external_urls"]["spotify"]
         return response_json["id"]
 
+    # Gets size of user's library
     def get_library_size(self):
         query = "https://api.spotify.com/v1/me/tracks?limit=1"
         page_response = requests.get(
@@ -59,7 +61,7 @@ class CreatePlaylist:
     
         return total
 
-
+    # Get the URI of the given song by the given artist
     def get_spotify_uri(self, song_name, artist):
 
         query = "https://api.spotify.com/v1/search?q=track%3A{}%20artist%3A{}&type=track".format(song_name, artist)
@@ -78,6 +80,8 @@ class CreatePlaylist:
 
         return uri
 
+    # Gets 20 songs that fit the weather
+    # Adds the songs to our newly created empty playlist
     def add_songs_to_playlist(self):
         # create playlist
         playlist_id = self.create_playlist()
@@ -104,6 +108,9 @@ class CreatePlaylist:
         response_json = add_response.json()
         return response_json
 
+    # Pulls random songs from user's Spotify library until we have 20
+    # Checks if the song fits with the weather
+    # Adds to list if so, rejects and moves on if not
     def get_random_songs_from_library(self, selection_size):
         song_list = []
         prev = []
@@ -157,7 +164,7 @@ class CreatePlaylist:
     def get_playlist_link(self):
         return self.playlist_link
 
-
+# Check if song is energetic and good for dancing
 def is_sunny(response_json, temp):
     valence = response_json["valence"]
     danceability = response_json["danceability"]
@@ -169,7 +176,7 @@ def is_sunny(response_json, temp):
     else:
         return valence > 0.35 and danceability <= 0.6
 
-
+# Check if song is slower, but not horribly sad
 def is_cloudy(response_json, temp):
     valence = response_json["valence"]
     danceability = response_json["danceability"]
@@ -181,7 +188,7 @@ def is_cloudy(response_json, temp):
     else:
         return valence < 0.5 and danceability < 0.3
 
-
+# Check that song is low energy, not meant to boost anyone's mood
 def is_rainy(response_json, temp):
     valence = response_json["valence"]
     energy = response_json["energy"]
@@ -189,16 +196,16 @@ def is_rainy(response_json, temp):
     return valence < 0.4 and energy < 0.4
 
 
-if __name__ == '__main__':
-    skies = input("What's the weather like today? ")
-    temperature = input("How hot is it? ")
-    cp = CreatePlaylist(skies, temperature)
-    if skies == "rainy":
-        pickmeup = input("Do you need a pick me up? y/n ")
-        if pickmeup == "y":
-            weather = "sunny"
+#if __name__ == '__main__':
+#    skies = input("What's the weather like today? ")
+#    temperature = input("How hot is it? ")
+#    #cp = CreatePlaylist(skies, temperature)
+#    if skies == "rainy":
+#        pickmeup = input("Do you need a pick me up? y/n ")
+#        if pickmeup == "y":
+#            weather = "sunny"
 
-    saved_num = int(input("How many songs do you have saved? "))
-    cp.add_songs_to_playlist(saved_num)
-    print("Done")
+#    saved_num = int(input("How many songs do you have saved? "))
+    #cp.add_songs_to_playlist(saved_num)
+#    print("Done")
 
